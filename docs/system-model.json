@@ -1,0 +1,183 @@
+{
+  "system": "LedgerLock \u2014 Freelance Financial Management, Debit/Credit & Investment Audit System",
+  "principles": [
+    "No anonymous transactions \u2014 every record names payer, receiver, enterer and verifier",
+    "Immutable audit trail \u2014 edits preserve prior versions; verified records cannot be deleted",
+    "Double-entry accounting \u2014 every transaction posts balanced Dr/Cr ledger entries",
+    "Separation of concerns \u2014 partner capital, transfers and revenue are distinct accounts",
+    "Proofs are evidence, not verified records \u2014 verification is a human partner action"
+  ],
+  "entities": {
+    "user": {
+      "fields": {
+        "id": "A|B",
+        "name": "string",
+        "role": "PARTNER",
+        "pin": "string (demo only \u2014 hash in prod)"
+      },
+      "permissions": {
+        "enter_transaction": [
+          "A",
+          "B"
+        ],
+        "upload_proof": [
+          "A",
+          "B"
+        ],
+        "verify_transaction": [
+          "A",
+          "B"
+        ],
+        "verify_own_transaction": "FORBIDDEN \u2014 enforced in reducer + UI",
+        "edit_verified_transaction": "FORBIDDEN",
+        "delete_transaction": "FORBIDDEN (no delete action exists)"
+      }
+    },
+    "transaction": {
+      "fields": {
+        "id": "TXN-XXXXXX (sequential, zero-padded)",
+        "type": "CREDIT | DEBIT",
+        "amount": "number > 0 (INR)",
+        "fromPerson": "A | B | CLIENT | BUSINESS | VENDOR",
+        "toPerson": "A | B | CLIENT | BUSINESS | VENDOR",
+        "category": "enum (14 values)",
+        "description": "string (required reason)",
+        "date": "YYYY-MM-DD",
+        "time": "HH:MM",
+        "paymentMethod": "Bank Transfer | UPI | Credit Card | Debit Card | Cash | PayPal | Other",
+        "referenceNo": "string (optional)",
+        "status": "PENDING | PROOF_UPLOADED | UNDER_REVIEW | VERIFIED | REJECTED",
+        "rejectionReason": "string (mandatory if REJECTED)",
+        "enteredBy": "user.id",
+        "verifiedBy": "user.id|null",
+        "notes": "string",
+        "version": "integer (incremented on edit)",
+        "createdAt": "ISO datetime",
+        "updatedAt": "ISO datetime"
+      },
+      "lifecycle": "PENDING \u2192 PROOF_UPLOADED \u2192 UNDER_REVIEW \u2192 VERIFIED | REJECTED"
+    },
+    "ledgerEntry": {
+      "note": "Derived, not stored \u2014 generated from category rules (ledger.js entriesFor)",
+      "fields": {
+        "account": "enum ACCOUNTS",
+        "debit": "number",
+        "credit": "number"
+      },
+      "invariant": "sum(debit) == sum(credit) per transaction; verified in reconciliation"
+    },
+    "proof": {
+      "fields": {
+        "id": "PRF-XXXX",
+        "txnId": "transaction.id",
+        "fileName": "string",
+        "fileType": "MIME type",
+        "dataUrl": "base64 (original file, unmodified)",
+        "uploadedBy": "user.id",
+        "uploadedAt": "ISO datetime"
+      },
+      "constraint": "never embedded in CSV/Excel exports \u2014 separate evidence report only"
+    },
+    "auditEvent": {
+      "fields": {
+        "id": "EVT-XXXX",
+        "txnId": "transaction.id",
+        "actor": "user.id",
+        "action": "CREATED | UPDATED | PROOF_UPLOADED | STATUS_CHANGED | VERIFIED | REJECTED",
+        "at": "ISO datetime",
+        "previous": "object|null (full snapshot on edit)",
+        "next": "object",
+        "notes": "string"
+      },
+      "rule": "append-only; no update/delete actions exist"
+    }
+  },
+  "categories": [
+    "Client Payment",
+    "Personal Investment",
+    "Business Expense",
+    "Software Subscription",
+    "Hosting",
+    "Domain",
+    "Advertising",
+    "Equipment",
+    "Refund",
+    "Client Advance",
+    "Salary/Withdrawal",
+    "Transfer Between Partners",
+    "Capital Return",
+    "Other"
+  ],
+  "chartOfAccounts": {
+    "CASH_BANK": "Cash / Bank (asset)",
+    "CLIENT_REVENUE": "Client Revenue (income)",
+    "CLIENT_ADVANCE": "Client Advance (liability)",
+    "PARTNER_CAPITAL_A": "Partner Capital A (equity)",
+    "PARTNER_CAPITAL_B": "Partner Capital B (equity)",
+    "PARTNER_DRAWING_A": "Partner Drawing A (equity contra)",
+    "PARTNER_DRAWING_B": "Partner Drawing B (equity contra)",
+    "PARTNER_PAYABLE": "Partner Payable \u2014 inter-partner transfers, NEVER revenue",
+    "EXP_HOSTING": "Hosting Expense",
+    "EXP_DOMAIN": "Domain Expense",
+    "EXP_SOFTWARE": "Software Subscription Expense",
+    "EXP_ADVERTISING": "Advertising Expense",
+    "EXP_EQUIPMENT": "Equipment Expense",
+    "EXP_BUSINESS": "Business Expense",
+    "EXP_REFUND": "Refund Given",
+    "EXP_OTHER": "Other Expense"
+  },
+  "doubleEntryRules": {
+    "Client Payment": "Dr CASH_BANK / Cr CLIENT_REVENUE",
+    "Client Advance": "Dr CASH_BANK / Cr CLIENT_ADVANCE (liability, not revenue)",
+    "Personal Investment": "Dr CASH_BANK / Cr PARTNER_CAPITAL_{fromPerson}",
+    "Capital Return": "Dr PARTNER_CAPITAL_{toPerson} / Cr CASH_BANK",
+    "Salary/Withdrawal": "Dr PARTNER_DRAWING_{toPerson} / Cr CASH_BANK",
+    "Transfer Between Partners": "Dr PARTNER_PAYABLE / Cr CASH_BANK (NOT revenue)",
+    "expenseCategories": "Dr EXP_* / Cr CASH_BANK",
+    "Other": "CREDIT \u2192 revenue rule, DEBIT \u2192 expense rule"
+  },
+  "formulas": {
+    "totalInvested": "\u03a3 verified Personal Investment",
+    "investmentA": "\u03a3 verified Personal Investment where fromPerson=A",
+    "investmentB": "\u03a3 verified Personal Investment where fromPerson=B",
+    "revenue": "\u03a3 verified Client Payment (transfers and capital excluded)",
+    "expenses": "\u03a3 verified expense-category transactions",
+    "netProfit": "revenue - expenses",
+    "capitalReturned": "\u03a3 verified Capital Return",
+    "netReturn": "capitalReturned + netProfit",
+    "roiPct": "netProfit / totalInvested * 100",
+    "cashBalance": "\u03a3 over CASH_BANK entries (debit - credit), chronological",
+    "totalCredits": "\u03a3 verified type=CREDIT",
+    "totalDebits": "\u03a3 verified type=DEBIT"
+  },
+  "reconciliation": {
+    "ledgerBalanced": "\u03a3 all ledger debits == \u03a3 all ledger credits",
+    "flags": [
+      "difference amount",
+      "unverifiedCount",
+      "verifiedWithoutProof",
+      "duplicateGroups (same date+amount+category+parties)"
+    ]
+  },
+  "exports": {
+    "csv": [
+      "transactions",
+      "audit-log",
+      "evidence-report (references only, no images)"
+    ],
+    "excel": "via CSV",
+    "pdf": "10-section print report (summary, investment, revenue, expense, debit/credit, partner contribution, table, verification status, audit, proof references)"
+  },
+  "routes": [
+    "/",
+    "/transactions",
+    "/transactions/new",
+    "/transactions/:id",
+    "/investments",
+    "/returns",
+    "/audit",
+    "/proofs",
+    "/reports",
+    "/settings"
+  ]
+}

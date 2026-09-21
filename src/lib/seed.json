@@ -1,0 +1,353 @@
+{
+  "meta": {
+    "system": "LedgerLock \u2014 Freelance Financial Audit System",
+    "version": "1.0.0",
+    "currency": "INR",
+    "txnCounter": 5
+  },
+  "users": [
+    {
+      "id": "A",
+      "name": "BALA PRASAN",
+      "email": "btopnexus@gmail.com",
+      "role": "PARTNER",
+      "pin": "btop@nexus"
+    },
+    {
+      "id": "B",
+      "name": "AKASH",
+      "email": "btopnexus@gmail.com",
+      "role": "PARTNER",
+      "pin": "btop@nexus"
+    }
+  ],
+  "transactions": [
+    {
+      "id": "TXN-000001",
+      "type": "CREDIT",
+      "amount": 20000,
+      "fromPerson": "A",
+      "toPerson": "A",
+      "category": "Personal Investment",
+      "description": "Initial capital by Person A",
+      "date": "2026-07-02",
+      "time": "10:15",
+      "paymentMethod": "Bank Transfer",
+      "referenceNo": "NEFT-88231",
+      "status": "VERIFIED",
+      "enteredBy": "A",
+      "verifiedBy": "B",
+      "notes": "Seed capital",
+      "createdAt": "2026-07-02T10:15:00",
+      "updatedAt": "2026-07-02T11:00:00",
+      "version": 1
+    },
+    {
+      "id": "TXN-000002",
+      "type": "CREDIT",
+      "amount": 15000,
+      "fromPerson": "B",
+      "toPerson": "B",
+      "category": "Personal Investment",
+      "description": "Initial capital by Person B",
+      "date": "2026-07-03",
+      "time": "09:40",
+      "paymentMethod": "UPI",
+      "referenceNo": "UPI-99312",
+      "status": "VERIFIED",
+      "enteredBy": "B",
+      "verifiedBy": "A",
+      "notes": "Seed capital",
+      "createdAt": "2026-07-03T09:40:00",
+      "updatedAt": "2026-07-03T10:05:00",
+      "version": 1
+    },
+    {
+      "id": "TXN-000003",
+      "type": "CREDIT",
+      "amount": 10000,
+      "fromPerson": "A",
+      "toPerson": "B",
+      "category": "Client Payment",
+      "description": "Website project \u2014 milestone 1 (Client: Acme Co)",
+      "date": "2026-08-10",
+      "time": "14:22",
+      "paymentMethod": "Bank Transfer",
+      "referenceNo": "INV-101-M1",
+      "status": "VERIFIED",
+      "enteredBy": "A",
+      "verifiedBy": "B",
+      "notes": "Invoice 101",
+      "createdAt": "2026-08-10T14:22:00",
+      "updatedAt": "2026-08-11T09:12:00",
+      "version": 1
+    },
+    {
+      "id": "TXN-000004",
+      "type": "DEBIT",
+      "amount": 4000,
+      "fromPerson": "B",
+      "toPerson": "A",
+      "category": "Hosting",
+      "description": "Domain + annual hosting (Hostinger)",
+      "date": "2026-09-01",
+      "time": "11:05",
+      "paymentMethod": "Credit Card",
+      "referenceNo": "CC-77120",
+      "status": "VERIFIED",
+      "enteredBy": "B",
+      "verifiedBy": "A",
+      "notes": "Renewal",
+      "createdAt": "2026-09-01T11:05:00",
+      "updatedAt": "2026-09-01T12:30:00",
+      "version": 1
+    },
+    {
+      "id": "TXN-000005",
+      "type": "DEBIT",
+      "amount": 5000,
+      "fromPerson": "A",
+      "toPerson": "B",
+      "category": "Domain",
+      "description": "Premium domain purchase \u2014 awaiting proof",
+      "date": "2026-09-17",
+      "time": "10:32",
+      "paymentMethod": "UPI",
+      "referenceNo": "UPI-55102",
+      "status": "UNDER_REVIEW",
+      "enteredBy": "A",
+      "verifiedBy": null,
+      "notes": "",
+      "createdAt": "2026-09-17T10:32:00",
+      "updatedAt": "2026-09-17T10:45:00",
+      "version": 1
+    }
+  ],
+  "proofs": [
+    {
+      "id": "PRF-0001",
+      "txnId": "TXN-000003",
+      "fileName": "bank-screenshot-m1.png",
+      "fileType": "image/png",
+      "uploadedBy": "A",
+      "uploadedAt": "2026-08-10T15:02:00",
+      "note": "Sample placeholder \u2014 replace with a real upload"
+    },
+    {
+      "id": "PRF-0002",
+      "txnId": "TXN-000004",
+      "fileName": "hosting-invoice.pdf",
+      "fileType": "application/pdf",
+      "uploadedBy": "B",
+      "uploadedAt": "2026-09-01T11:20:00",
+      "note": "Sample placeholder"
+    }
+  ],
+  "auditEvents": [
+    {
+      "id": "EVT-0001",
+      "txnId": "TXN-000001",
+      "actor": "A",
+      "action": "CREATED",
+      "at": "2026-07-02T10:15:00",
+      "previous": null,
+      "next": {
+        "status": "PENDING",
+        "amount": 20000
+      },
+      "notes": "Transaction entered"
+    },
+    {
+      "id": "EVT-0002",
+      "txnId": "TXN-000001",
+      "actor": "A",
+      "action": "PROOF_UPLOADED",
+      "at": "2026-07-02T10:40:00",
+      "previous": {
+        "status": "PENDING"
+      },
+      "next": {
+        "status": "PROOF_UPLOADED"
+      },
+      "notes": "NEFT receipt attached"
+    },
+    {
+      "id": "EVT-0003",
+      "txnId": "TXN-000001",
+      "actor": "B",
+      "action": "STATUS_CHANGED",
+      "at": "2026-07-02T10:55:00",
+      "previous": {
+        "status": "PROOF_UPLOADED"
+      },
+      "next": {
+        "status": "UNDER_REVIEW"
+      },
+      "notes": "Under review"
+    },
+    {
+      "id": "EVT-0004",
+      "txnId": "TXN-000001",
+      "actor": "B",
+      "action": "VERIFIED",
+      "at": "2026-07-02T11:00:00",
+      "previous": {
+        "status": "UNDER_REVIEW"
+      },
+      "next": {
+        "status": "VERIFIED"
+      },
+      "notes": "Matched bank statement"
+    },
+    {
+      "id": "EVT-0005",
+      "txnId": "TXN-000002",
+      "actor": "B",
+      "action": "CREATED",
+      "at": "2026-07-03T09:40:00",
+      "previous": null,
+      "next": {
+        "status": "PENDING",
+        "amount": 15000
+      },
+      "notes": "Transaction entered"
+    },
+    {
+      "id": "EVT-0006",
+      "txnId": "TXN-000002",
+      "actor": "A",
+      "action": "VERIFIED",
+      "at": "2026-07-03T10:05:00",
+      "previous": {
+        "status": "PENDING"
+      },
+      "next": {
+        "status": "VERIFIED"
+      },
+      "notes": "UPI ref matched"
+    },
+    {
+      "id": "EVT-0007",
+      "txnId": "TXN-000003",
+      "actor": "A",
+      "action": "CREATED",
+      "at": "2026-08-10T14:22:00",
+      "previous": null,
+      "next": {
+        "status": "PENDING",
+        "amount": 10000
+      },
+      "notes": "Transaction entered"
+    },
+    {
+      "id": "EVT-0008",
+      "txnId": "TXN-000003",
+      "actor": "A",
+      "action": "PROOF_UPLOADED",
+      "at": "2026-08-10T15:02:00",
+      "previous": {
+        "status": "PENDING"
+      },
+      "next": {
+        "status": "PROOF_UPLOADED"
+      },
+      "notes": "Bank screenshot attached"
+    },
+    {
+      "id": "EVT-0009",
+      "txnId": "TXN-000003",
+      "actor": "B",
+      "action": "STATUS_CHANGED",
+      "at": "2026-08-10T17:30:00",
+      "previous": {
+        "status": "PROOF_UPLOADED"
+      },
+      "next": {
+        "status": "UNDER_REVIEW"
+      },
+      "notes": "Under review"
+    },
+    {
+      "id": "EVT-0010",
+      "txnId": "TXN-000003",
+      "actor": "B",
+      "action": "VERIFIED",
+      "at": "2026-08-11T09:12:00",
+      "previous": {
+        "status": "UNDER_REVIEW"
+      },
+      "next": {
+        "status": "VERIFIED"
+      },
+      "notes": "Client invoice matched"
+    },
+    {
+      "id": "EVT-0011",
+      "txnId": "TXN-000004",
+      "actor": "B",
+      "action": "CREATED",
+      "at": "2026-09-01T11:05:00",
+      "previous": null,
+      "next": {
+        "status": "PENDING",
+        "amount": 4000
+      },
+      "notes": "Transaction entered"
+    },
+    {
+      "id": "EVT-0012",
+      "txnId": "TXN-000004",
+      "actor": "B",
+      "action": "PROOF_UPLOADED",
+      "at": "2026-09-01T11:20:00",
+      "previous": {
+        "status": "PENDING"
+      },
+      "next": {
+        "status": "PROOF_UPLOADED"
+      },
+      "notes": "Invoice attached"
+    },
+    {
+      "id": "EVT-0013",
+      "txnId": "TXN-000004",
+      "actor": "A",
+      "action": "VERIFIED",
+      "at": "2026-09-01T12:30:00",
+      "previous": {
+        "status": "PROOF_UPLOADED"
+      },
+      "next": {
+        "status": "VERIFIED"
+      },
+      "notes": "Card statement matched"
+    },
+    {
+      "id": "EVT-0014",
+      "txnId": "TXN-000005",
+      "actor": "A",
+      "action": "CREATED",
+      "at": "2026-09-17T10:32:00",
+      "previous": null,
+      "next": {
+        "status": "PENDING",
+        "amount": 5000
+      },
+      "notes": "Transaction entered"
+    },
+    {
+      "id": "EVT-0015",
+      "txnId": "TXN-000005",
+      "actor": "A",
+      "action": "STATUS_CHANGED",
+      "at": "2026-09-17T10:45:00",
+      "previous": {
+        "status": "PENDING"
+      },
+      "next": {
+        "status": "UNDER_REVIEW"
+      },
+      "notes": "Awaiting payment screenshot from vendor"
+    }
+  ]
+}
