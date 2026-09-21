@@ -25,7 +25,7 @@ export default function Settings() {
   return (
     <>
       <h1 className="page-title">Settings & Authentication</h1>
-      <p className="page-sub">Demo authentication — in production, replace with server-side auth (e.g., JWT + hashed passwords), RBAC and secure file storage.</p>
+          <p className="page-sub">Shared records are loaded from Supabase. Transactions and audit history are stored remotely for both partners.</p>
 
       <div className="cards" style={{ gridTemplateColumns: "repeat(auto-fit,minmax(280px,1fr))" }}>
         <div className="panel">
@@ -71,15 +71,15 @@ export default function Settings() {
         <div className="panel">
           <h3>Data</h3>
           <p className="muted" style={{ fontSize: 13 }}>
-            All records persist in this browser (localStorage). Use Reports → “Full data backup” to export everything as JSON.
+            Transactions, proofs, earnings, and audit events persist in the connected Supabase project. The reset action permanently deletes shared records.
           </p>
           <div className="btn-row">
             {!confirmReset ? (
-              <button className="btn danger" onClick={() => setConfirmReset(true)}>Reset demo data</button>
+              <button className="btn danger" onClick={() => setConfirmReset(true)}>Erase all shared records</button>
             ) : (
               <>
                 <button className="btn danger" onClick={() => { dispatch({ type: "RESET" }); setConfirmReset(false); }}>
-                  Yes — erase and reseed
+                  Yes — permanently erase records
                 </button>
                 <button className="btn secondary" onClick={() => setConfirmReset(false)}>Cancel</button>
               </>
