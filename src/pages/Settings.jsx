@@ -8,6 +8,7 @@ export default function Settings() {
   const [userId, setUserId] = useState("A");
   const [email, setEmail] = useState("btopnexus@gmail.com");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const [confirmReset, setConfirmReset] = useState(false);
 
@@ -49,7 +50,12 @@ export default function Settings() {
               </div>
               <div className="field">
                 <label>Password</label>
-                <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="btop@nexus" />
+                <div className="password-control">
+                  <input type={showPassword ? "text" : "password"} value={password} onChange={(e) => setPassword(e.target.value)} placeholder="btop@nexus" />
+                  <button className="btn secondary small" type="button" onClick={() => setShowPassword((visible) => !visible)}>
+                    {showPassword ? "Hide" : "Show"}
+                  </button>
+                </div>
               </div>
               <button className="btn" type="submit">Sign in</button>
             </form>

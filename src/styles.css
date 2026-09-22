@@ -76,6 +76,8 @@ form.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px,
 .field input, .field select, .field textarea {
   border: 1px solid var(--line); border-radius: 8px; padding: 9px 10px; font-size: 14px; background: #fff; font-family: inherit;
 }
+.password-control { display: flex; gap: 8px; }
+.password-control input { min-width: 0; flex: 1; }
 .field input:focus, .field select:focus, .field textarea:focus { outline: 2px solid var(--blue); outline-offset: -1px; }
 
 .filters { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; margin-bottom: 14px; }
