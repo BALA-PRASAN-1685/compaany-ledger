@@ -19,8 +19,12 @@ function RequireAuth({ children }) {
 }
 
 export default function App() {
+  const { error } = useStore();
+
   return (
-    <Routes>
+    <>
+      {error && <div className="config-error" role="alert">{error}</div>}
+      <Routes>
       <Route path="/settings" element={<Settings />} />
       <Route
         element={
@@ -40,6 +44,7 @@ export default function App() {
         <Route path="/reports" element={<Reports />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Route>
-    </Routes>
+      </Routes>
+    </>
   );
 }

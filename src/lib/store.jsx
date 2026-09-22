@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useEffect, useMemo, useState } from "react";
 import { computeState } from "./ledger.js";
-import { supabase } from "./supabase.js";
+import { supabase, supabaseConfigError } from "./supabase.js";
 
 const LS_USER = "ledgerlock-user";
 
@@ -49,6 +49,8 @@ const fromEarning = (e) => ({ id: e.id, date: e.date, amount: e.amount, earnedBy
 const toEarning = (e) => ({ id: e.id, date: e.date, amount: Number(e.amount), earned_by: e.earnedBy, entered_by: e.enteredBy, involved: e.involved || [], split_a: Number(e.splitA || 0), split_b: Number(e.splitB || 0), source: e.source || null, description: e.description || null, created_at: e.createdAt || new Date().toISOString() });
 
 async function loadRemote() {
+  if (supabaseConfigError) throw new Error(supabaseConfigError);
+
   const [meta, users, transactions, proofs, earnings, auditEvents] = await Promise.all([
     supabase.from("app_meta").select("*").maybeSingle(),
     supabase.from("app_users").select("*").order("id"),
