@@ -51,7 +51,7 @@ export default function Settings() {
               <div className="field">
                 <label>Password</label>
                 <div className="password-control">
-                  <input type={showPassword ? "text" : "password"} value={password} onChange={(e) => setPassword(e.target.value)} placeholder="btop@nexus" />
+                  <input type={showPassword ? "text" : "password"} value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Enter a password" />
                   <button className="btn secondary small" type="button" onClick={() => setShowPassword((visible) => !visible)}>
                     {showPassword ? "Hide" : "Show"}
                   </button>
